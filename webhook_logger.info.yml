@@ -1,0 +1,6 @@
+
+name: Webhook Logger
+description: Sends logs and alerts to webhooks. Currently only Slack.
+type: module
+core_version_requirement: ^8 || ^9
+package: Logging and alerts
