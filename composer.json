@@ -1,0 +1,12 @@
+{
+  "name": "drupal/webhook_logger",
+  "type": "drupal-module",
+  "description": "Sends Drupal logs to a Slack webhook.",
+  "keywords": ["Drupal"],
+  "license": "GPL-2.0+",
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "https://github.com/ilrWebServices/webhook_logger/issues",
+    "source": "https://github.com/ilrWebServices/webhook_logger.git"
+  }
+}
