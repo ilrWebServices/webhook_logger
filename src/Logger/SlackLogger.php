@@ -5,8 +5,9 @@ namespace Drupal\webhook_logger\Logger;
 use Psr\Log\LoggerInterface;
 use Drupal\Core\Logger\RfcLoggerTrait;
 use Drupal\Core\Logger\LogMessageParserInterface;
-use Drupal\Core\Logger\RfcLogLevel;
 use GuzzleHttp\ClientInterface;
+use Drupal\Core\Config\ConfigFactory;
+use Drupal\Core\Logger\RfcLogLevel;
 
 /**
  * A logger that posts to Slack.
@@ -30,22 +31,40 @@ class SlackLogger implements LoggerInterface {
   protected $httpClient;
 
   /**
+   * A configuration object containing webhook_logger settings.
+   *
+   * @var \Drupal\Core\Config\Config
+   */
+  protected $config;
+
+  /**
    * Constructs a SlackLogger.
    *
   * @param \Drupal\Core\Logger\LogMessageParserInterface $parser
    *   The parser to use when extracting message variables.
    * @param \GuzzleHttp\ClientInterface $client
    *   The HTTP client.
+   * @param \Drupal\Core\Config\ConfigFactory $config_factory
+   *   The configuration factory object.
    */
-  public function __construct(LogMessageParserInterface $parser, ClientInterface $client) {
+  public function __construct(LogMessageParserInterface $parser, ClientInterface $client, ConfigFactory $config_factory) {
     $this->parser = $parser;
     $this->httpClient = $client;
+    $this->config = $config_factory->get('webhook_logger.settings');
   }
 
   /**
    * {@inheritdoc}
    */
   public function log($level, $message, array $context = []) {
+    $channel_blocklist = $this->config->get('channel_blocklist');
+    $channel = $context['channel'] ?? '';
+
+    // Ignore if the channel (e.g. cron, page not found) is in the blocklist.
+    if (in_array($channel, $channel_blocklist)) {
+      return;
+    }
+
     // Populate the message placeholders and then replace them in the message.
     $message_placeholders = $this->parser->parseMessagePlaceholders($message, $context);
     $message = empty($message_placeholders) ? $message : strtr($message, $message_placeholders);
@@ -61,15 +80,8 @@ class SlackLogger implements LoggerInterface {
       RfcLogLevel::DEBUG => ':ladybug:',
     ];
 
-    $channel = $context['channel'] ?? '';
-
-    // @todo
-    if ($channel === 'page not found') {
-      return;
-    }
-
     try {
-      $response = $this->httpClient->post(getenv('SLACK_WEBHOOK_URL'), ['json' => [
+      $response = $this->httpClient->post($this->config->get('slack_webhook_url'), ['json' => [
         'text' => $icons[$level] . ' ' . $channel . ': ' . $message,
       ]]);
     }
