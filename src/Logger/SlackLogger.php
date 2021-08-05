@@ -94,7 +94,19 @@ class SlackLogger implements LoggerInterface {
               "type" => "plain_text",
               "text" => $channel,
               "emoji" => true,
-            ],
+            ]
+          ]
+        ],
+        [
+          "type" => "section",
+          "text" => [
+            "type" => "mrkdwn",
+            "text" => "```$message```",
+          ]
+        ],
+        [
+          "type" => "context",
+          "elements" => [
             [
               "type" => "plain_text",
               "text" => $context['request_uri'] ?? '',
@@ -107,13 +119,6 @@ class SlackLogger implements LoggerInterface {
             ]
           ]
         ],
-        [
-          "type" => "section",
-          "text" => [
-            "type" => "mrkdwn",
-            "text" => "```$message```",
-          ]
-        ]
       ]
     ];
 
