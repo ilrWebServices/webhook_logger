@@ -80,10 +80,45 @@ class SlackLogger implements LoggerInterface {
       RfcLogLevel::DEBUG => ':ladybug:',
     ];
 
+    $text = [
+      "blocks" => [
+        [
+          "type" => "context",
+          "elements" => [
+            [
+              "type" => "plain_text",
+              "text" => $icons[$level],
+              "emoji" => true,
+            ],
+            [
+              "type" => "plain_text",
+              "text" => $channel,
+              "emoji" => true,
+            ],
+            [
+              "type" => "plain_text",
+              "text" => $context['request_uri'] ?? '',
+              "emoji" => true,
+            ],
+            [
+              "type" => "plain_text",
+              "text" => $context['ip'] ?? '',
+              "emoji" => true,
+            ]
+          ]
+        ],
+        [
+          "type" => "section",
+          "text" => [
+            "type" => "mrkdwn",
+            "text" => "```$message```",
+          ]
+        ]
+      ]
+    ];
+
     try {
-      $response = $this->httpClient->post($this->config->get('slack_webhook_url'), ['json' => [
-        'text' => $icons[$level] . ' ' . $channel . ': ' . $message,
-      ]]);
+      $response = $this->httpClient->post($this->config->get('slack_webhook_url'), ['json' => $text]);
     }
     catch (\Exception $e) {
       // Do nothing.
