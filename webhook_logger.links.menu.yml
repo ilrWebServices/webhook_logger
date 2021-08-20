@@ -1,0 +1,8 @@
+
+# Webhook Logger menu items definition
+entity.webhook_logger.collection:
+  title: 'Webhook Logger'
+  route_name: entity.webhook_logger.collection
+  description: 'List Webhook Logger (bundles)'
+  parent: system.admin_structure
+  weight: 99

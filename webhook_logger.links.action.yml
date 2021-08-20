@@ -1,0 +1,5 @@
+entity.webhook_logger.add_form:
+  route_name: entity.webhook_logger.add_form
+  title: 'Add Webhook Logger'
+  appears_on:
+    - entity.webhook_logger.collection
