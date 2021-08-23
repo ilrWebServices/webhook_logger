@@ -34,7 +34,9 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  *     "label",
  *     "uuid",
  *     "url",
- *     "message_level_whitelist"
+ *     "message_level_whitelist",
+ *     "content_type",
+ *     "template"
  *   },
  *   links = {
  *     "canonical" = "/admin/config/development/logging/webhook_logger/{webhook_logger}",
@@ -74,5 +76,19 @@ class WebhookLogger extends ConfigEntityBase implements WebhookLoggerInterface {
    * @var array
    */
   protected $message_level_whitelist;
+
+  /**
+   * The Webhook Logger webhook content type.
+   *
+   * @var string
+   */
+  protected $content_type;
+
+  /**
+   * The Webhook Logger webhook template.
+   *
+   * @var string
+   */
+  protected $template;
 
 }

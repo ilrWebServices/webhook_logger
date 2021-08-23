@@ -31,12 +31,22 @@ class WebhookLoggerForm extends EntityForm {
 
     $webhook_logger = $this->entity;
 
+    // dump($webhook_logger);
+
     $form['label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Label'),
       '#maxlength' => 255,
       '#default_value' => $webhook_logger->label(),
       '#description' => $this->t("Label for the Webhook Logger."),
+      '#required' => TRUE,
+    ];
+
+    $form['test'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('test'),
+      '#maxlength' => 255,
+      '#default_value' => $webhook_logger->get(test),
       '#required' => TRUE,
     ];
 
@@ -117,6 +127,25 @@ class WebhookLoggerForm extends EntityForm {
         ],
       ];
     }
+
+    $form['content_type'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Content type'),
+      '#options' => [
+        'application/json' => 'JSON',
+        'text/plain' => 'Text',
+      ],
+      '#default_value' => $webhook_logger->get('content_type'),
+    ];
+
+    $form['template'] = [
+      '#type' => 'textarea',
+      '#title' => $this->t('Template'),
+      '#rows' => 20,
+      '#default_value' => $webhook_logger->get('template'),
+      // '#description' => $this->t("Label for the Webhook Logger."),
+      '#required' => TRUE,
+    ];
 
     return $form;
   }
