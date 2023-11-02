@@ -1,6 +1,6 @@
 services:
   logger.slack:
     class: Drupal\webhook_logger\Logger\SlackLogger
-    arguments: ['@logger.log_message_parser', '@http_client', '@config.factory']
+    arguments: ['@logger.log_message_parser', '@http_client', '@config.factory', '@entity_type.manager']
     tags:
       - { name: logger }
