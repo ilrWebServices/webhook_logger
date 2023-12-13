@@ -56,7 +56,7 @@ class SlackLogger implements LoggerInterface {
   /**
    * {@inheritdoc}
    */
-  public function log($level, $message, array $context = []) {
+  public function log($level, string|\Stringable $message, array $context = []): void {
     $channel_blocklist = $this->config->get('channel_blocklist');
     $channel = $context['channel'] ?? '';
 
